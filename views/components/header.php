@@ -10,7 +10,7 @@
     <title><?= $title ?? 'Studio Class' ?></title>
 </head>
 <body class="flex flex-col min-h-screen">
-<nav class="bg-white shadow">
+<header class="bg-white shadow">
     <?php component('navbar'); ?>
-</nav>
+</header>
 <main>

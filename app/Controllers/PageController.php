@@ -2,10 +2,13 @@
 
 namespace App\Controllers;
 
+use App\Models\User;
+
 class PageController
 {
     public function index(): void
     {
-        view('index');
+        $users = User::all();
+        view('index', compact('users'));
     }
 }

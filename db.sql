@@ -10,3 +10,6 @@ CREATE TABLE IF NOT EXISTS Users (
     image VARCHAR(255),
     PRIMARY KEY (ID)
 );
+
+INSERT INTO Users (name, email, password, role, image) VALUES
+('John Doe', 'john.doe@example.com', 'password', 'teacher', 'default.png')
