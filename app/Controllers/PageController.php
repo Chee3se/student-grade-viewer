@@ -8,7 +8,7 @@ class PageController
 {
     public function index(): void
     {
-        $users = User::all();
-        view('index', compact('users'));
+        //$users = User::all()->getAll();
+        view('index');
     }
 }

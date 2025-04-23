@@ -13,4 +13,4 @@
 <header class="bg-white shadow">
     <?php component('navbar'); ?>
 </header>
-<main>
+<main class="flex-1 flex flex-col justify-center items-center">

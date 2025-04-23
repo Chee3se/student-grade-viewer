@@ -2,15 +2,21 @@
 
 namespace Core;
 
-use core\Database;
-
 class Model extends Database
 {
     protected static string $table = '';
     protected static mixed $statement = null;
 
+    public static function init()
+    {
+        if (!isset(self::$connection)) {
+            self::$connection = Database::connect(require_once __DIR__ . '/../config/database.php');
+        }
+    }
+
     public function hasMany(Model $model): Model
     {
+        self::init();
         $sql = "SELECT * FROM " . static::$table . " INNER JOIN " . $model::$table . " ON " . static::$table . "." . $model::$table . "_id = " . $model::$table . ".id";
         self::$statement = self::$connection->prepare($sql);
         self::$statement->execute();
@@ -57,6 +63,7 @@ class Model extends Database
      */
     public static function find(int $id): Model
     {
+        self::init();
         $sql = "SELECT * FROM " . static::$table . " WHERE id = :id";
         self::$statement = self::$connection->prepare($sql);
         self::$statement->execute(['id' => $id]);
@@ -67,6 +74,7 @@ class Model extends Database
      */
     public static function create(array $data): self
     {
+        self::init();
         $sql = "INSERT INTO " . static::$table . " (";
         foreach ($data as $key => $value) {
             $sql .= $key . ',';
@@ -88,6 +96,7 @@ class Model extends Database
      */
     public static function update(int $id, array $data): Model
     {
+        self::init();
         $sql = "UPDATE " . static::$table . " SET ";
         foreach ($data as $key => $value) {
             $sql .= $key . ' = :' . $key . ',';
@@ -105,6 +114,7 @@ class Model extends Database
      */
     public static function delete(int $id): Model
     {
+        self::init();
         $sql = "DELETE FROM " . static::$table . " WHERE id = :id";
         self::$statement = self::$connection->prepare($sql);
         self::$statement->execute(['id' => $id]);
@@ -119,6 +129,7 @@ class Model extends Database
      */
     public static function where(string $key, string $operator, string $value): Model
     {
+        self::init();
         $sql = "SELECT * FROM " . static::$table . " WHERE " . $key . " " . $operator . " :value";
         self::$statement = self::$connection->prepare($sql);
         self::$statement->execute(['value' => $value]);
@@ -148,6 +159,7 @@ class Model extends Database
      */
     public static function join(string $table, string $key, string $value): Model
     {
+        self::init();
         $sql = "SELECT * FROM " . static::$table . " INNER JOIN " . $table . " ON " . static::$table . "." . $key . " = " . $table . "." . $value;
         self::$statement = self::$connection->prepare($sql);
         self::$statement->execute();
@@ -160,6 +172,7 @@ class Model extends Database
      */
     public static function groupBy(string $key): Model
     {
+        self::init();
         $sql = "SELECT * FROM " . static::$table . " GROUP BY " . $key;
         self::$statement = self::$connection->prepare($sql);
         self::$statement->execute();
@@ -173,6 +186,7 @@ class Model extends Database
      */
     public static function orderBy(string $key, string $order = 'ASC'): Model
     {
+        self::init();
         $sql = static::$table . " ORDER BY " . $key . " " . $order;
         self::$statement = self::$connection->prepare($sql);
         self::$statement->execute();
@@ -190,9 +204,8 @@ class Model extends Database
      */
     public static function execute(mixed $query_string, mixed $params): Model
     {
-
+        self::init();
         $query = self::$connection->prepare($query_string);
-
         $query->execute($params);
         return new static;
     }
