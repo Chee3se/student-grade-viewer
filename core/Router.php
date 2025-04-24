@@ -1,10 +1,8 @@
 <?php
 namespace core;
 
-use core\Middleware;
-use core\Request;
-
 use Exception;
+
 class Router
 {
     protected array $routes = [];
@@ -92,6 +90,19 @@ class Router
         $this->routes[array_key_last($this->routes)]['middleware'] = $key;
         return $this;
     }
+    
+    /**
+     * Apply rate limiting to the last added route.
+     *
+     * @param int $maxAttempts Maximum number of attempts allowed per minute
+     * @return Router
+     */
+    public function rateLimit(int $maxAttempts = 60): Router
+    {
+        $lastIndex = array_key_last($this->routes);
+        $this->routes[$lastIndex]['rate_limit'] = $maxAttempts;
+        return $this;
+    }
     /**
      * Dispatch the router and call the corresponding controller.
      *
@@ -120,12 +131,19 @@ class Router
                 }
 
                 Middleware::resolve($route['middleware'] ?? null);
+                
+                // Apply rate limiting if configured
+                if (isset($route['rate_limit'])) {
+                    (new \core\RateLimit())->handle($route['rate_limit']);
+                }
+                
                 [$class, $method] = $route['controller'];
                 $request = new Request($_POST + $_FILES + $_GET, $_SERVER);
                 $instance = new $class();
                 return $instance->$method($request,$parameters);
             }
         }
+        $this->abort(404, 'Page not found');
         return null;
     }
     /**
@@ -142,12 +160,17 @@ class Router
      *
      * @param int $code
      * @param string $message
+     * @param string $description
      * @return void
      */
-    public function abort(int $code = 404, string $message = ''): void
+    public function abort(int $code = 404, string $message = 'Page not found', string $description = 'The page you are looking for does not exist.'): void
     {
         http_response_code($code);
-        view('404', compact('message'));
+        view('error', [
+            'code' => $code,
+            'message' => $message,
+            'description' => $description
+        ]);
         exit;
     }
 }

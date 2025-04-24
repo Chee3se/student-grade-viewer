@@ -3,14 +3,16 @@
 namespace core;
 
 use Exception;
-use Student;
-use Teacher;
+use core\Middleware\Guest;
+use core\Middleware\Student;
+use core\Middleware\Teacher;
 
 class Middleware
 {
     public const MAP = [
         'student' => Student::class,
         'teacher' => Teacher::class,
+        'guest' => Guest::class,
     ];
 
     /**
@@ -24,6 +26,7 @@ class Middleware
             return;
         }
 
+        $key = strtolower($key);
         $middleware = static::MAP[$key] ?? false;
 
         if (!$middleware) {

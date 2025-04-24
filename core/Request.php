@@ -15,6 +15,16 @@ class Request
         $this->data = $data;
         $this->server = $server;
     }
+    
+    /**
+     * Get the client IP address.
+     *
+     * @return string The client IP address
+     */
+    public function ip(): string
+    {
+        return $this->server['REMOTE_ADDR'] ?? '127.0.0.1';
+    }
 
     public function all(): array
     {
