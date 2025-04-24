@@ -2,12 +2,12 @@
 
 namespace core\Middleware;
 
-class Student
+class Guest
 {
     public function handle(): void
     {
-        if ($_SESSION['user']['role'] == 'student') {
-            header('Location: /');
+        if (isset($_SESSION['user'])) {
+            redirect('/');
             die();
         }
     }
