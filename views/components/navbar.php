@@ -7,7 +7,7 @@
     <nav class="space-x-4">
       <a href="#" class="hover:underline">Par mums</a>
       <a href="#" class="hover:underline ">Kontakti</a>
-      <a href="login.php" class="px-4 py-2 bg-white text-orange-600 font-medium rounded hover:bg-gray-100">Pieslēgties</a>
+      <a href="/login" class="px-4 py-2 bg-white text-orange-600 font-medium rounded hover:bg-gray-100">Pieslēgties</a>
     </nav>
   </div>
 </header>
