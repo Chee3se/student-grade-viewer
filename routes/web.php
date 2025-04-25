@@ -16,3 +16,6 @@ $router->get('/dashboard', [PageController::class, 'dashboard'])->only('auth');
 
 $router->get('/login', [SessionController::class, 'create'])->only('guest');
 $router->post('/login', [SessionController::class, 'store'])->only('guest')->rateLimit(5);
+
+// Velak vajadzetu nomainit uz delete metodi :/
+$router->get('/logout', [SessionController::class, 'destroy'])->only('auth');

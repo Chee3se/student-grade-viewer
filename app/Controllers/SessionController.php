@@ -27,6 +27,12 @@ class SessionController
         }
 
         Session::put('user', $user);
+        redirect('/dashboard');
+    }
+
+    public function destroy(): void
+    {
+        Session::flush();
         redirect('/');
     }
 }
