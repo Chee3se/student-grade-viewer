@@ -178,11 +178,12 @@
   </div>
 
   <footer class="bg-white border-t border-gray-200 mt-4">
-    <div class="container mx-auto px-4 py-3 text-center text-xs text-gray-500">
-      © 2025 Izglītības ministrija. Visas tiesības aizsargātas.
-    </div>
+    
   </footer>
 
   <?php component('footer'); ?>
+
+  <nav>
+  </nav>
 </body>
 </html>
