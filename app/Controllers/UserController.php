@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use App\Models\User;
-use Core\Request;
-use Core\Session;
+use core\Request;
+use core\Session;
 
 class UserController
 {

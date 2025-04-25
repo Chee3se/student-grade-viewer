@@ -14,4 +14,5 @@ $router->post('/users', [UserController::class, 'store'])->only('teacher');
 
 $router->get('/dashboard', [PageController::class, 'dashboard'])->only('auth');
 
-$router->get('/login', [SessionController::class, 'create'])->only('guest')->rateLimit(5);
+$router->get('/login', [SessionController::class, 'create'])->only('guest');
+$router->post('/login', [SessionController::class, 'store'])->only('guest')->rateLimit(5);

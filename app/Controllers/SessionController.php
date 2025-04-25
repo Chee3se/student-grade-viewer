@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use App\Models\User;
-use Core\Request;
-use Core\Session;
+use core\Request;
+use core\Session;
 
 class SessionController
 {
@@ -17,12 +17,11 @@ class SessionController
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required|min:6'
         ]);
 
-        $user = User::where('email', '=', request('email'))->first();
-
-        if (!$user || !password_verify(request('password'), $user->password)) {
+        $user = User::where('email', '=', request('email'))->get();
+        if (!$user || !hash_check(request('password'), $user['password'])) {
             redirect('/login');
             return;
         }

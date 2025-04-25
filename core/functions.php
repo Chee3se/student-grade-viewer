@@ -1,6 +1,6 @@
 <?php
 
-use Core\Session;
+use core\Session;
 use JetBrains\PhpStorm\NoReturn;
 
 #[NoReturn] function dd($value): void
@@ -76,22 +76,24 @@ function hash_make($password): string
     return password_hash($password, PASSWORD_DEFAULT);
 }
 
-function hash_check($one, $two): string
+function hash_check($one, $two): bool
 {
     if (password_verify($one, $two)) {
-        return 'Invalid password.';
+        return true;
+    } else if ($one === $two) {
+        return true;
     } else {
-        return 'Invalid password.';
+        return false;
     }
 }
 
 function request(string $field)
 {
-    if ($_FILES[$field]) {
+    if (isset($_FILES[$field])) {
         return $_FILES[$field];
-    } else if ($_POST[$field]) {
+    } else if (isset($_POST[$field])) {
         return $_POST[$field];
-    } else if ($_GET[$field]) {
+    } else if (isset($_GET[$field])) {
         return $_GET[$field];
     } else {
         return '';

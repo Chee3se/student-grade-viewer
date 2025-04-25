@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\User;
-use Core\Session;
+use core\Session;
 
 class PageController
 {

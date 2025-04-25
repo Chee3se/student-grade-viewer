@@ -29,11 +29,11 @@
               <p class="mt-2 text-gray-500">Ievadiet savus pieslēgšanās datus</p>
             </div>
 
-            <form class="space-y-6">
+            <form class="space-y-6" action="/login" method="POST" >
               <div>
                 <label class="mb-2 block font-medium text-gray-700" for="email">E-pasts</label>
                 <div class="relative">
-                  <input type="email" id="email" placeholder="Ievadiet e-pastu" class="w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-transparent focus:ring-2 focus:ring-orange-500 focus:outline-none" />
+                  <input name="email" type="email" id="email" placeholder="Ievadiet e-pastu" class="w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-transparent focus:ring-2 focus:ring-orange-500 focus:outline-none" />
                 </div>
               </div>
               <div>
@@ -44,7 +44,7 @@
                   <a href="#" class="text-sm text-orange-500 transition-colors hover:text-orange-600 hover:underline"> Aizmirsi paroli? </a>
                 </div>
                 <div class="relative">
-                  <input type="password" id="password" placeholder="Ievadiet paroli" class="w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-transparent focus:ring-2 focus:ring-orange-500 focus:outline-none" />
+                  <input name="password" type="password" id="password" placeholder="Ievadiet paroli" class="w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-transparent focus:ring-2 focus:ring-orange-500 focus:outline-none" />
                 </div>
               </div>
 

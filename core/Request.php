@@ -1,8 +1,7 @@
 <?php
 
-namespace Core;
+namespace core;
 
-use Core\Validator;
 use JetBrains\PhpStorm\NoReturn;
 
 class Request
