@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="/css/index.css" />
     <link rel="script" href="/js/index.js" />
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+    <title><?= $title ?? 'Studio Class' ?></title>
   </head>
-  <body>
+  <body class="flex flex-col min-h-screen">
   <?php component('navbar'); ?>
+  <main class="flex-1 flex flex-col justify-center items-center">
