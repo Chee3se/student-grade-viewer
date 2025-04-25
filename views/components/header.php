@@ -11,6 +11,6 @@
     <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
     <title><?= $title ?? 'Studio Class' ?></title>
   </head>
-  <body class="flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen">
   <?php component('navbar'); ?>
   <main class="flex-1 flex flex-col justify-center items-center">

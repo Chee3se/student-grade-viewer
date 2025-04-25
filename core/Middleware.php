@@ -3,6 +3,7 @@
 namespace core;
 
 use Exception;
+use core\Middleware\Auth;
 use core\Middleware\Guest;
 use core\Middleware\Student;
 use core\Middleware\Teacher;
@@ -13,6 +14,7 @@ class Middleware
         'student' => Student::class,
         'teacher' => Teacher::class,
         'guest' => Guest::class,
+        'auth' => Auth::class,
     ];
 
     /**
