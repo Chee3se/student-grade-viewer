@@ -15,3 +15,4 @@ CREATE TABLE IF NOT EXISTS Users (
 INSERT INTO Users (name, email, password, role, image) VALUES
 ('Teacher', 'teacher@example.com', 'password', 'teacher', 'default.png'),
 ('Student', 'student@example.com', 'password', 'student', 'default.png')
+
