@@ -1,5 +1,4 @@
-<?php include 'components/header.php'; ?>
-<?php include 'components/navbar.php'; ?>
+<?php component('header'); ?>
 
 <!-- Hero Section -->
 <section class="bg-white">

@@ -10,6 +10,4 @@
     <link rel="script" href="/js/index.js" />
   </head>
   <body>
-    
-  </body>
-</html>
+  <?php component('navbar'); ?>
