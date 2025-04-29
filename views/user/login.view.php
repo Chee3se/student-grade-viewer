@@ -18,12 +18,12 @@
   </head>
   <body class="flex min-h-screen flex-col bg-gray-50">
     <main class="flex flex-grow items-center justify-center p-4 md:p-0">
-      <div class="login-container w-full max-w-md overflow-hidden rounded-2xl bg-white">
+      <div class="login-container w-full max-w-lg overflow-hidden rounded-2xl bg-white">
         <!-- Left decorative sidebar -->
         <div class="flex flex-col md:flex-row">
           <div class="hidden w-2 bg-gradient-to-b from-orange-400 to-orange-600 md:block"></div>
 
-          <div class="flex-1 p-8 md:p-10">
+          <div class="flex-1 p-12 md:p-16">
             <div class="mb-8 text-center">
               <h2 class="text-3xl font-bold text-gray-800">Pieslēgties</h2>
               <p class="mt-2 text-gray-500">Ievadiet savus pieslēgšanās datus</p>
