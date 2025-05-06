@@ -4,10 +4,6 @@
   $subjects = ['Matemātika', 'Latviešu valoda', 'Vēsture', 'Bioloģija'];  //SHITAS IR PAGAIDAM BUS DB
 ?>
 
-
-
-
-
 <!DOCTYPE html>
 <html lang="lv">
 <head>
@@ -19,12 +15,11 @@
 
   <div class="max-w-5xl mx-auto my-6 space-y-8 px-4">
 
-   
     <div class="bg-orange-500 text-white py-3 px-4 rounded shadow">
       <h1 class="text-xl font-semibold">Skolotāja panelis — Atzīmju un stundu pievienošana</h1>
     </div>
 
-    
+    <!-- Skolēna pievienošana -->
     <div class="bg-white p-6 rounded shadow space-y-4">
       <h2 class="text-lg font-semibold text-gray-800">Pievienot jaunu skolēnu</h2>
       <form method="POST" onsubmit="preventSubmit(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -46,21 +41,22 @@
       }
     </script>
 
+    <!-- Skolēna izvēle -->
+    <div class="bg-white p-6 rounded shadow">
+      <label for="student_select" class="block mb-1 font-medium">Izvēlies skolēnu:</label>
+      <select id="student_select" class="w-full border px-3 py-2 rounded">
+        <?php foreach ($students as $s): ?>
+          <option value="<?= $s['id'] ?>"><?= htmlspecialchars($s['name']) ?></option>
+        <?php endforeach; ?>
+      </select>
+    </div>
     
-    <form action="submit_teacher.php" method="POST" class="bg-white p-6 rounded shadow space-y-6">
-
-      <div>
-        <label for="student_id" class="block mb-1 font-medium">Izvēlies skolēnu:</label>
-        <select name="student_id" id="student_id" class="w-full border px-3 py-2 rounded">
-          <?php foreach ($students as $s): ?>
-            <option value="<?= $s['id'] ?>"><?= htmlspecialchars($s['name']) ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-
+    <!-- Atzīmju pievienošana - ATSEVIŠĶA FORMA -->
+    <form action="submit_grades.php" method="POST" class="bg-white p-6 rounded shadow space-y-6">
+      <input type="hidden" name="student_id" id="grade_student_id">
       
-      <div class="border-t pt-4">
-        <h2 class="font-semibold text-gray-700 mb-2">Pievienot atzīmi</h2>
+      <div>
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Pievienot atzīmi</h2>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label class="block mb-1">Priekšmets</label>
@@ -85,9 +81,18 @@
         </div>
       </div>
 
-      <!-- Stundas ievade -->
-      <div class="border-t pt-4">
-        <h2 class="font-semibold text-gray-700 mb-2">Pievienot stundu</h2>
+      <!-- Iesniegt atzīmi -->
+      <div class="text-right pt-4">
+        <button type="submit" class="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600">Saglabāt atzīmi</button>
+      </div>
+    </form>
+
+    <!-- Stundu pievienošana - ATSEVIŠĶA FORMA -->
+    <form action="submit_lessons.php" method="POST" class="bg-white p-6 rounded shadow space-y-6">
+      <input type="hidden" name="student_id" id="lesson_student_id">
+      
+      <div>
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Pievienot stundu</h2>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label class="block mb-1">Stundas Nr.</label>
@@ -118,12 +123,30 @@
         </div>
       </div>
 
-      <!-- Iesniegt -->
+      <!-- Iesniegt stundu -->
       <div class="text-right pt-4">
-        <button type="submit" class="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600">Saglabāt</button>
+        <button type="submit" class="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600">Saglabāt stundu</button>
       </div>
     </form>
   </div>
+
+  <script>
+    // Sinhronizē izvēlēto skolēnu starp formām
+    document.getElementById('student_select').addEventListener('change', function() {
+      document.getElementById('grade_student_id').value = this.value;
+      document.getElementById('lesson_student_id').value = this.value;
+    });
+    
+    // Iestatīt sākotnējo vērtību
+    window.addEventListener('DOMContentLoaded', function() {
+      const studentSelect = document.getElementById('student_select');
+      if (studentSelect.options.length > 0) {
+        const selectedValue = studentSelect.options[0].value;
+        document.getElementById('grade_student_id').value = selectedValue;
+        document.getElementById('lesson_student_id').value = selectedValue;
+      }
+    });
+  </script>
 </body>
 <?php component('footer'); ?>
 </html>
