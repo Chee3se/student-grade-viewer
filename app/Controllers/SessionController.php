@@ -21,7 +21,7 @@ class SessionController
         ]);
 
         $user = User::where('email', '=', request('email'))->get();
-        if (!$user || !hash_check(request('password'), $user['password'])) {
+        if (!isset($user) || !hash_check(request('password'), $user['password'])) {
             redirect('/login');
             return;
         }
