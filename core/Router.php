@@ -143,7 +143,7 @@ class Router
                 return $instance->$method($request,$parameters);
             }
         }
-        $this->abort(404, 'Page not found');
+        $this->abort(404, 'Lapa netika atrasta');
         return null;
     }
     /**
@@ -163,7 +163,7 @@ class Router
      * @param string $description
      * @return void
      */
-    public function abort(int $code = 404, string $message = 'Page not found', string $description = 'The page you are looking for does not exist.'): void
+    public function abort(int $code = 404, string $message = 'Lapa netika atrasta', string $description = 'Lapa, ko cenšaties meklēt netika atrasta.'): void
     {
         http_response_code($code);
         view('error', [

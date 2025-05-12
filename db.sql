@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS Teachers (
     FOREIGN KEY (user_id) REFERENCES Users(ID)
 );
 
-CREATE TABLE Subjects (
+CREATE TABLE IF NOT EXISTS Subjects (
     ID INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE,
     description TEXT,
@@ -35,7 +35,7 @@ CREATE TABLE Subjects (
     FOREIGN KEY (teacher_id) REFERENCES Teachers(ID)
 );
 
-CREATE TABLE Grades (
+CREATE TABLE IF NOT EXISTS Grades (
     ID INT NOT NULL AUTO_INCREMENT,
     student_id INT NOT NULL,
     subject_id INT NOT NULL,
@@ -46,10 +46,30 @@ CREATE TABLE Grades (
 );
 
 # seeder
-INSERT INTO Users (name, email, password, role, image) VALUES
-('Admin', 'admin@example.com', 'password', 'admin', 'default.png'),
-('Teacher', 'teacher@example.com', 'password', 'teacher', 'default.png'),
-('Student', 'student@example.com', 'password', 'student', 'default.png');
+INSERT INTO Users (first_name, last_name, email, password, role, image) VALUES
+-- Admin
+('Marta', 'Ozoliņa', 'admin@example.com', 'password', 'admin', 'default.png'),
+
+-- Teachers
+('Anna', 'Kalniņa', 'teacher@example.com', 'password', 'teacher', 'default.png'),
+('Roberts', 'Liepa', 'teacher2@example.com', 'password', 'teacher', 'default.png'),
+
+-- Students
+('Jānis', 'Bērziņš', 'student@example.com', 'password', 'student', 'default.png'),
+('Agnese', 'Kronīte', 'student2@example.com', 'password', 'student', 'default.png'),
+('Mārtiņš', 'Mazais', 'student3@example.com', 'password', 'student', 'default.png'),
+('Paula', 'Līdaka', 'student4@example.com', 'password', 'student', 'default.png'),
+('Sandis', 'Pumpurs', 'student5@example.com', 'password', 'student', 'default.png'),
+('Edgars', 'Cielēns', 'student6@example.com', 'password', 'student', 'default.png'),
+('Linda', 'Zirne', 'student7@example.com', 'password', 'student', 'default.png'),
+('Katrīna', 'Vītola', 'student8@example.com', 'password', 'student', 'default.png'),
+('Rihards', 'Bitītis', 'student9@example.com', 'password', 'student', 'default.png'),
+('Evija', 'Eglīte', 'student10@example.com', 'password', 'student', 'default.png'),
+('Niks', 'Zalktis', 'student11@example.com', 'password', 'student', 'default.png'),
+('Anete', 'Gailīte', 'student12@example.com', 'password', 'student', 'default.png'),
+('Daniels', 'Buks', 'student13@example.com', 'password', 'student', 'default.png'),
+('Vita', 'Strauta', 'student14@example.com', 'password', 'student', 'default.png'),
+('Maksis', 'Putniņš', 'student15@example.com', 'password', 'student', 'default.png');
 
 INSERT INTO Students (user_id) VALUES
 (3);

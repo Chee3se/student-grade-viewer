@@ -16,8 +16,7 @@ class UserController
     }
     public function show(): void
     {
-        $user = User::find(Session::get('user')['id']);
-
+        $user = User::where('id', '=', Session::get('user')['ID'])->get();
         view('user/show', ['user' => $user]);
     }
 

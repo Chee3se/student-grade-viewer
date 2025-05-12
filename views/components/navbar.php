@@ -7,7 +7,13 @@
     <nav class="space-x-4">
       <a href="#" class="hover:underline">Par mums</a>
       <a href="#" class="hover:underline ">Kontakti</a>
-      <a href="/login" class="px-4 py-2 bg-white text-orange-600 font-medium rounded hover:bg-gray-100">Pieslēgties</a>
+        <?php if (isset($_SESSION['user'])): ?>
+            <a href="/dashboard" class="hover:underline">Panelis</a>
+            <a href="/profile" class="hover:underline">Profils</a>
+          <a href="/logout" class="px-4 py-2 bg-white text-orange-600 font-medium rounded hover:bg-gray-100">Iziet</a>
+        <?php else: ?>
+            <a href="/login" class="px-4 py-2 bg-white text-orange-600 font-medium rounded hover:bg-gray-100">Pieslēgties</a>
+        <?php endif; ?>
     </nav>
   </div>
 </header>
