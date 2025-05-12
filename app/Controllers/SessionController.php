@@ -22,8 +22,7 @@ class SessionController
 
         $user = User::where('email', '=', request('email'))->get();
         if (!isset($user) || !hash_check(request('password'), $user['password'])) {
-            redirect('/login');
-            return;
+            $request->error('password', 'Nepareizs e-pasts vai parole');
         }
 
         Session::put('user', $user);

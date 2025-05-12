@@ -81,7 +81,8 @@ class Request
 
     #[NoReturn] public function error($field, $error): void
     {
-        Session::flash('errors', [$field => [$error]]);
+        $errors[$field] = $error;
+        Session::flash('errors', $errors);
         Session::flash('old', $this->data);
         redirect((new Router)->previousUrl());
     }

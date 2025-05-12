@@ -60,6 +60,9 @@ class UserController
             }
             User::update(Session::get('user')['ID'], ['image' => '/storage/users/' . $file['name']]);
         } elseif (request('url')) {
+            $request->validate([
+                'url' => 'required|url'
+            ]);
             User::update(Session::get('user')['ID'], ['image' => request('url')]);
         }
 

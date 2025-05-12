@@ -26,7 +26,6 @@
           <div class="flex-1 p-12 md:p-16">
             <div class="mb-8 text-center">
               <h2 class="text-3xl font-bold text-gray-800">Pieslēgties</h2>
-              <p class="mt-2 text-gray-500">Ievadiet savus pieslēgšanās datus</p>
             </div>
 
             <form class="space-y-6" action="/login" method="POST" >
@@ -41,22 +40,16 @@
 
                 <div class="mb-2 flex items-center justify-between">
                   <label class="block font-medium text-gray-700" for="password">Parole</label>
-                  <a href="#" class="text-sm text-orange-500 transition-colors hover:text-orange-600 hover:underline"> Aizmirsi paroli? </a>
                 </div>
                 <div class="relative">
                   <input name="password" type="password" id="password" placeholder="Ievadiet paroli" class="w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-transparent focus:ring-2 focus:ring-orange-500 focus:outline-none" />
                 </div>
+                <?= error('password') ?>
               </div>
 
 
               <div class="pt-2">
                 <button type="submit" class="w-full transform rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 py-3 font-bold text-white shadow-md transition-all hover:scale-[1.02] hover:from-orange-600 hover:to-orange-700 active:scale-[0.98]">PIESLĒGTIES</button>
-              </div>
-              <div class="mt-6 text-center">
-                <p class="text-gray-600">
-                  Nav konta?
-                  <a href="#" class="font-medium text-orange-500 transition-colors hover:text-orange-600 hover:underline"> Reģistrēties </a>
-                </p>
               </div>
               
             </form>

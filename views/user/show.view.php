@@ -26,11 +26,13 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Augšupielādēt attēlu</label>
                         <input type="file" name="image" accept="image/*" class="w-full border rounded p-2">
+                        <?= error('file') ?>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">VAI ievadiet attēla URL</label>
                         <input type="url" name="url" placeholder="https://example.com/image.jpg"
                                class="w-full border rounded p-2">
+                        <?= error('url') ?>
                     </div>
                     <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">
                         Saglabāt izmaiņas
