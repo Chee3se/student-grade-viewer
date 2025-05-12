@@ -10,7 +10,12 @@
         <?php if (isset($_SESSION['user'])): ?>
             <a href="/dashboard" class="hover:underline">Panelis</a>
             <a href="/profile" class="hover:underline">Profils</a>
-          <a href="/logout" class="px-4 py-2 bg-white text-orange-600 font-medium rounded hover:bg-gray-100">Iziet</a>
+            <form action="/logout" method="POST" class="inline">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" class="px-4 py-1.5 bg-white text-orange-600 font-medium rounded hover:bg-gray-100">
+                    Iziet
+                </button>
+            </form>
         <?php else: ?>
             <a href="/login" class="px-4 py-2 bg-white text-orange-600 font-medium rounded hover:bg-gray-100">Pieslēgties</a>
         <?php endif; ?>

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use core\FileUpload;
 use core\Request;
 use core\Session;
 
@@ -35,5 +36,28 @@ class UserController
         User::create($data);
 
         redirect('/users');
+    }
+
+    public function image(Request $request): void
+    {
+        if (request('image') && request('image')['error'] !== UPLOAD_ERR_NO_FILE) {
+            $request->validate([
+                'image' => 'required|image'
+            ]);
+
+            $file = request('image');
+
+            $to = BASE_PATH . '/public/storage/users/' . $file['name'];
+            $from = $file['tmp_name'];
+
+            if (!move_uploaded_file($from, $to)) {
+                dd('nuh uh');
+            }
+            User::update(Session::get('user')['ID'], ['image' => '/storage/users/' . $file['name']]);
+        } elseif (request('url')) {
+            User::update(Session::get('user')['ID'], ['image' => request('url')]);
+        }
+
+        redirect('/profile');
     }
 }

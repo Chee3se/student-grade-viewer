@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS studio_class;
 USE studio_class;
 
 CREATE TABLE IF NOT EXISTS Users (
-    ID INT NOT NULL AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -12,47 +12,33 @@ CREATE TABLE IF NOT EXISTS Users (
     PRIMARY KEY (ID)
 );
 
-CREATE TABLE IF NOT EXISTS Students (
-    ID INT NOT NULL AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    PRIMARY KEY (ID),
-    FOREIGN KEY (user_id) REFERENCES Users(ID)
-);
-
-CREATE TABLE IF NOT EXISTS Teachers (
-    ID INT NOT NULL AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    PRIMARY KEY (ID),
-    FOREIGN KEY (user_id) REFERENCES Users(ID)
-);
-
 CREATE TABLE IF NOT EXISTS Subjects (
-    ID INT NOT NULL AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE,
     description TEXT,
-    teacher_id INT NOT NULL,
+    user_id INT NOT NULL,
     PRIMARY KEY (ID),
-    FOREIGN KEY (teacher_id) REFERENCES Teachers(ID)
+    FOREIGN KEY (user_id) REFERENCES Users(ID)
 );
 
 CREATE TABLE IF NOT EXISTS Grades (
-    ID INT NOT NULL AUTO_INCREMENT,
-    student_id INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
     subject_id INT NOT NULL,
     grade DECIMAL(5,2) NOT NULL,
     PRIMARY KEY (ID),
-    FOREIGN KEY (student_id) REFERENCES Students(ID),
+    FOREIGN KEY (user_id) REFERENCES Users(ID),
     FOREIGN KEY (subject_id) REFERENCES Subjects(ID)
 );
 
 # seeder
 INSERT INTO Users (first_name, last_name, email, password, role, image) VALUES
 -- Admin
-('Marta', 'Ozoliņa', 'admin@example.com', 'password', 'admin', 'default.png'),
+('Marta', 'Ozoliņa', 'admin@example.com', 'password', 'admin', '/images/default.png'),
 
 -- Teachers
-('Anna', 'Kalniņa', 'teacher@example.com', 'password', 'teacher', 'default.png'),
-('Roberts', 'Liepa', 'teacher2@example.com', 'password', 'teacher', 'default.png'),
+('Anna', 'Kalniņa', 'teacher@example.com', 'password', 'teacher', '/images/default.png'),
+('Roberts', 'Liepa', 'teacher2@example.com', 'password', 'teacher', '/images/default.png'),
 
 -- Students
 ('Jānis', 'Bērziņš', 'student@example.com', 'password', 'student', 'default.png'),
@@ -71,16 +57,22 @@ INSERT INTO Users (first_name, last_name, email, password, role, image) VALUES
 ('Vita', 'Strauta', 'student14@example.com', 'password', 'student', 'default.png'),
 ('Maksis', 'Putniņš', 'student15@example.com', 'password', 'student', 'default.png');
 
-INSERT INTO Students (user_id) VALUES
-(3);
+INSERT INTO Subjects (name, description, user_id) VALUES
+('Matemātika', 'Matemātika I', 2),
+('Ķīmija', 'Ķīmija I', 3),
+('Fizika', 'Fizika I', 2),
+('Bioloģija', 'Bioloģija I',2),
+('Programmēšana', 'Programmēšana I', 3);
 
-INSERT INTO Teachers (user_id) VALUES
-(2);
-
-INSERT INTO Subjects (name, description, teacher_id) VALUES
-('Matemātika', 'Matemātika I', 1),
-('Ķīmija', 'Ķīmija I', 1);
-
-INSERT INTO Grades (student_id, subject_id, grade) VALUES
-(1, 1, 5.0),
-(1, 2, 4.5);
+INSERT INTO Grades (user_id, subject_id, grade) VALUES
+(3, 1, 8.5),
+(3, 2, 9.0),
+(5, 3, 7.5),
+(5, 1, 6.0),
+(8, 2, 8.0),
+(8, 1, 9.5),
+(9, 2, 10.0),
+(9, 1, 7.0),
+(10, 2, 8.5),
+(11, 1, 6.5),
+(7, 2, 7.5);

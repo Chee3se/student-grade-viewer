@@ -32,7 +32,7 @@
       <label for="student_select" class="block mb-1 font-medium">Izvēlies skolēnu:</label>
       <select id="student_select" class="w-full border px-3 py-2 rounded">
         <?php foreach ($students as $s): ?>
-          <option><?= htmlspecialchars($s['first_name']) ?></option>
+          <option value="<?= $s['ID'] ?>"><?= htmlspecialchars($s['first_name']) ?></option>
         <?php endforeach; ?>
       </select>
     </div>
@@ -47,7 +47,7 @@
             <label class="block mb-1">Priekšmets</label>
             <select name="grade_subject" class="w-full border px-2 py-1 rounded">
               <?php foreach ($subjects as $sub): ?>
-                <option value="<?= $sub ?>"><?= $sub ?></option>
+                <option value="<?= $sub['ID'] ?>"><?= $sub['name'] ?></option>
               <?php endforeach; ?>
             </select>
           </div>
