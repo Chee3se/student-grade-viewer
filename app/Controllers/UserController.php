@@ -40,6 +40,11 @@ class UserController
 
     public function image(Request $request): void
     {
+        if (!is_dir(BASE_PATH . "/public/storage/users/")) {
+            mkdir(BASE_PATH . "/public/storage/"); // Make storage dir
+            mkdir(BASE_PATH . "/public/storage/users/"); // Make users dir
+        }
+
         if (request('image') && request('image')['error'] !== UPLOAD_ERR_NO_FILE) {
             $request->validate([
                 'image' => 'required|image'

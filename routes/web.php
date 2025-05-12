@@ -8,14 +8,16 @@ global $router;
 
 $router->get('/', [PageController::class, 'index']);
 
+// User shii
 $router->get('/users', [UserController::class, 'index'])->only('teacher');
-$router->get('/profile', [UserController::class, 'show']);
 $router->post('/users', [UserController::class, 'store'])->only('teacher');
 
-$router->get('/dashboard', [PageController::class, 'dashboard'])->only('auth');
+$router->get('/profile', [UserController::class, 'show'])->only('auth');
+$router->delete('/logout', [SessionController::class, 'destroy'])->only('auth');
+$router->post('/user/image', [UserController::class, 'image'])->only('auth');
 
 $router->get('/login', [SessionController::class, 'create'])->only('guest');
 $router->post('/login', [SessionController::class, 'store'])->only('guest')->rateLimit(5);
 
-$router->delete('/logout', [SessionController::class, 'destroy'])->only('auth');
-$router->post('/user/image', [UserController::class, 'image'])->only('auth');
+// Da rest
+$router->get('/dashboard', [PageController::class, 'dashboard'])->only('auth');
