@@ -19,7 +19,14 @@ Database::connect($config);
 $router = new core\Router;
 require BASE_PATH . 'routes/web.php';
 
-$uri = parse_url($_SERVER['REQUEST_URI'])['path'];
+$parsed = parse_url($_SERVER['REQUEST_URI'] ?? '/');
+
+if ($parsed && isset($parsed['path'])) {
+    $uri = $parsed['path'];
+} else {
+    $uri = '/';
+}
+
 $method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
 
 

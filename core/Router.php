@@ -122,7 +122,7 @@ class Router
             $pattern = preg_replace('#:([a-zA-Z0-9_]+)#', '(?<$1>[^/]+)', $pattern);
             $pattern = '#^' . $pattern . '$#';
 
-            if (preg_match($pattern, $uri, $matches)) {
+            if (preg_match($pattern, (string) $uri, $matches)) {
                 $parameters = [];
                 foreach ($matches as $key => $value) {
                     if (!is_int($key)) {

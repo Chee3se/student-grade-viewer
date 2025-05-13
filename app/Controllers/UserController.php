@@ -18,6 +18,7 @@ class UserController
     public function show(): void
     {
         $user = User::where('id', '=', Session::get('user')['ID'])->get();
+        Session::put('user', $user);
         view('user/show', ['user' => $user]);
     }
 
@@ -40,32 +41,50 @@ class UserController
 
     public function image(Request $request): void
     {
+        $request->validate([
+            'image' => 'required|image'
+        ]);
+        if (request('image')['error'] === UPLOAD_ERR_NO_FILE) {
+            $request->error('image', 'No file uploaded');
+        }
+
         if (!is_dir(BASE_PATH . "/public/storage/users/")) {
             mkdir(BASE_PATH . "/public/storage/"); // Make storage dir
             mkdir(BASE_PATH . "/public/storage/users/"); // Make users dir
         }
 
-        if (request('image') && request('image')['error'] !== UPLOAD_ERR_NO_FILE) {
-            $request->validate([
-                'image' => 'required|image'
-            ]);
+        unlink(BASE_PATH . "/public" . Session::get('user')['image']);
 
-            $file = request('image');
+        $file = request('image');
+        $random = generateRandomString() . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+        $to = BASE_PATH . '/public/storage/users/' . $random;
+        $from = $file['tmp_name'];
+        if (!move_uploaded_file($from, $to)) {
+            dd('nuh uh');
+        }
+        User::update(Session::get('user')['ID'], ['image' => '/storage/users/' . $random]);
+        redirect('/profile');
+    }
 
-            $to = BASE_PATH . '/public/storage/users/' . $file['name'];
-            $from = $file['tmp_name'];
+    public function password(Request $request): void
+    {
+        $request->validate([
+            'password' => 'required',
+            'new_password' => 'required|min:6',
+        ]);
 
-            if (!move_uploaded_file($from, $to)) {
-                dd('nuh uh');
-            }
-            User::update(Session::get('user')['ID'], ['image' => '/storage/users/' . $file['name']]);
-        } elseif (request('url')) {
-            $request->validate([
-                'url' => 'required|url'
-            ]);
-            User::update(Session::get('user')['ID'], ['image' => request('url')]);
+        $user = User::where('id', '=', Session::get('user')['ID'])->get();
+
+        if (!hash_check(request('password'), $user['password'])) {
+            $request->error('password', 'Nepareiza parole');
         }
 
+        if (request('new_password') == request('password')) {
+            $request->error('new_password', 'Jaunā parole nedrīkst būt tāda pati kā vecā');
+        }
+
+        User::update(Session::get('user')['ID'], ['password' => hash_make(request('new_password'))]);
+        Session::flush();
         redirect('/profile');
     }
 }

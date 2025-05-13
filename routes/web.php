@@ -21,6 +21,7 @@ $router->get('/profile', [UserController::class, 'show'])->only('auth');
 $router->delete('/logout', [SessionController::class, 'destroy'])->only('auth');
 // Update profile picture
 $router->post('/user/image', [UserController::class, 'image'])->only('auth');
+$router->post('/user/password', [UserController::class, 'password'])->only('auth');
 
 // Login page
 $router->get('/login', [SessionController::class, 'create'])->only('guest');
