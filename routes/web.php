@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\GradeController;
 use App\Controllers\PageController;
 use App\Controllers\SessionController;
 use App\Controllers\SubjectController;
@@ -34,3 +35,6 @@ $router->get('/dashboard', [PageController::class, 'dashboard'])->only('auth');
 
 
 $router->get('/test', [SubjectController::class, 'index']);
+
+$router->get('/user/create', [UserController::class, 'create'])->only('teacher');
+$router->get('/grade/create', [GradeController::class, 'create'])->only('teacher');
