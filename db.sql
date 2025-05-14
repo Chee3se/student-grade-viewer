@@ -26,6 +26,9 @@ CREATE TABLE IF NOT EXISTS Grades (
     user_id INT NOT NULL,
     subject_id INT NOT NULL,
     grade DECIMAL(5,2) NOT NULL,
+    type ENUM('test', 'homework', 'exam') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (ID),
     FOREIGN KEY (user_id) REFERENCES Users(ID),
     FOREIGN KEY (subject_id) REFERENCES Subjects(ID)
@@ -41,21 +44,21 @@ INSERT INTO Users (first_name, last_name, email, password, role, image) VALUES
 ('Roberts', 'Liepa', 'teacher2@example.com', 'password', 'teacher', '/images/default.png'),
 
 -- Students
-('Jānis', 'Bērziņš', 'student@example.com', 'password', 'student', 'default.png'),
-('Agnese', 'Kronīte', 'student2@example.com', 'password', 'student', 'default.png'),
-('Mārtiņš', 'Mazais', 'student3@example.com', 'password', 'student', 'default.png'),
-('Paula', 'Līdaka', 'student4@example.com', 'password', 'student', 'default.png'),
-('Sandis', 'Pumpurs', 'student5@example.com', 'password', 'student', 'default.png'),
-('Edgars', 'Cielēns', 'student6@example.com', 'password', 'student', 'default.png'),
-('Linda', 'Zirne', 'student7@example.com', 'password', 'student', 'default.png'),
-('Katrīna', 'Vītola', 'student8@example.com', 'password', 'student', 'default.png'),
-('Rihards', 'Bitītis', 'student9@example.com', 'password', 'student', 'default.png'),
-('Evija', 'Eglīte', 'student10@example.com', 'password', 'student', 'default.png'),
-('Niks', 'Zalktis', 'student11@example.com', 'password', 'student', 'default.png'),
-('Anete', 'Gailīte', 'student12@example.com', 'password', 'student', 'default.png'),
-('Daniels', 'Buks', 'student13@example.com', 'password', 'student', 'default.png'),
-('Vita', 'Strauta', 'student14@example.com', 'password', 'student', 'default.png'),
-('Maksis', 'Putniņš', 'student15@example.com', 'password', 'student', 'default.png');
+('Jānis', 'Bērziņš', 'student@example.com', 'password', 'student', '/images/default.png'),
+('Agnese', 'Kronīte', 'student2@example.com', 'password', 'student', '/images/default.png'),
+('Mārtiņš', 'Mazais', 'student3@example.com', 'password', 'student', '/images/default.png'),
+('Paula', 'Līdaka', 'student4@example.com', 'password', 'student', '/images/default.png'),
+('Sandis', 'Pumpurs', 'student5@example.com', 'password', 'student', '/images/default.png'),
+('Edgars', 'Cielēns', 'student6@example.com', 'password', 'student', '/images/default.png'),
+('Linda', 'Zirne', 'student7@example.com', 'password', 'student', '/images/default.png'),
+('Katrīna', 'Vītola', 'student8@example.com', 'password', 'student', '/images/default.png'),
+('Rihards', 'Bitītis', 'student9@example.com', 'password', 'student', '/images/default.png'),
+('Evija', 'Eglīte', 'student10@example.com', 'password', 'student', '/images/default.png'),
+('Niks', 'Zalktis', 'student11@example.com', 'password', 'student', '/images/default.png'),
+('Anete', 'Gailīte', 'student12@example.com', 'password', 'student', '/images/default.png'),
+('Daniels', 'Buks', 'student13@example.com', 'password', 'student', '/images/default.png'),
+('Vita', 'Strauta', 'student14@example.com', 'password', 'student', '/images/default.png'),
+('Maksis', 'Putniņš', 'student15@example.com', 'password', 'student', '/images/default.png');
 
 INSERT INTO Subjects (name, description, user_id) VALUES
 ('Matemātika', 'Matemātika I', 2),

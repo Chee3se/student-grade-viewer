@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\User;
-use core\FileUpload;
 use core\Request;
 use core\Session;
 
@@ -12,22 +11,20 @@ class UserController
     public function index(): void
     {
         $users = User::all()->getAll();
-
-        view('user/index', ['users' => $users]);
+        view('user/index', compact('users'));
     }
     public function show(): void
     {
-        $user = User::where('id', '=', Session::get('user')['ID'])->get();
+        $user = User::where('id', '=', Session::get('user')['id'])->get();
         Session::put('user', $user);
-        view('user/show', ['user' => $user]);
+        view('user/show', compact('user'));
     }
-
     public function store(Request $request): void
     {
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6'
+            'password' => 'required|min:8'
         ]);
 
         $data['password'] = hash_make(request('password'));
@@ -38,7 +35,6 @@ class UserController
 
         redirect('/users');
     }
-
     public function image(Request $request): void
     {
         $request->validate([
@@ -62,18 +58,17 @@ class UserController
         if (!move_uploaded_file($from, $to)) {
             dd('nuh uh');
         }
-        User::update(Session::get('user')['ID'], ['image' => '/storage/users/' . $random]);
+        User::update(Session::get('user')['id'], ['image' => '/storage/users/' . $random]);
         redirect('/profile');
     }
-
     public function password(Request $request): void
     {
         $request->validate([
             'password' => 'required',
-            'new_password' => 'required|min:6',
+            'new_password' => 'required|min:8',
         ]);
 
-        $user = User::where('id', '=', Session::get('user')['ID'])->get();
+        $user = User::where('id', '=', Session::get('user')['id'])->get();
 
         if (!hash_check(request('password'), $user['password'])) {
             $request->error('password', 'Nepareiza parole');
@@ -83,7 +78,7 @@ class UserController
             $request->error('new_password', 'Jaunā parole nedrīkst būt tāda pati kā vecā');
         }
 
-        User::update(Session::get('user')['ID'], ['password' => hash_make(request('new_password'))]);
+        User::update(Session::get('user')['id'], ['password' => hash_make(request('new_password'))]);
         Session::flush();
         redirect('/profile');
     }

@@ -2,6 +2,7 @@
 
 use App\Controllers\PageController;
 use App\Controllers\SessionController;
+use App\Controllers\SubjectController;
 use App\Controllers\UserController;
 
 global $router;
@@ -30,3 +31,6 @@ $router->post('/login', [SessionController::class, 'store'])->only('guest')->rat
 
 // Dashboard page
 $router->get('/dashboard', [PageController::class, 'dashboard'])->only('auth');
+
+
+$router->get('/test', [SubjectController::class, 'index']);
