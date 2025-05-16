@@ -23,6 +23,23 @@ class PageController
                 $students = User::where('role', '=', 'student')->getAll();
                 $subjects = Subject::all()->getAll();
                 $grades = Grade::all()->getAll();
+                
+                // Ensure grades have numeric values
+                if (is_array($grades)) {
+                    foreach ($grades as &$grade) {
+                        if (isset($grade['grade'])) {
+                            // Convert to float to ensure it's numeric
+                            $grade['grade'] = (float) $grade['grade'];
+                        }
+                    }
+                    unset($grade); // Break the reference
+                }
+                
+                // Log data counts for debugging
+                error_log("Students: " . (is_array($students) ? count($students) : "not an array"));
+                error_log("Subjects: " . (is_array($subjects) ? count($subjects) : "not an array"));
+                error_log("Grades: " . (is_array($grades) ? count($grades) : "not an array"));
+                
                 view("dashboard/teacher", [
                     'students' => $students,
                     'subjects' => $subjects,

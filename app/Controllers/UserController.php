@@ -19,6 +19,10 @@ class UserController
         Session::put('user', $user);
         view('user/show', compact('user'));
     }
+    public function create(): void
+    {
+        view('user/create');
+    }
     public function store(Request $request): void
     {
         $request->validate([
@@ -33,6 +37,34 @@ class UserController
 
         User::create($data);
 
+        redirect('/users');
+    }
+    public function edit(int $id): void
+    {
+        $user = User::find($id)->get();
+        if (!$user) {
+            redirect('/users');
+        }
+        view('user/edit', compact('user'));
+    }
+    public function update(Request $request, int $id): void
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8'
+        ]);
+
+        $data['name'] = request('name');
+        $data['email'] = request('email');
+        $data['password'] = hash_make(request('password'));
+
+        User::update($id, $data);
+        redirect('/users');
+    }
+    public function destroy(int $id): void
+    {
+        User::delete($id);
         redirect('/users');
     }
     public function image(Request $request): void
