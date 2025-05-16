@@ -66,7 +66,7 @@ INSERT INTO Subjects (name, description, user_id) VALUES
 ('Bioloģija', 'Bioloģija I',2),
 ('Programmēšana', 'Programmēšana I', 3);
 
-INSERT INTO Grades (user_id, subject_id, grade, type) VALUES
+INSERT INTO Grades (user_id, subject_id, grade) VALUES
 (4, 1, 8.5),
 (4, 2, 9.0),
 (4, 3, 7.5),
@@ -82,4 +82,4 @@ INSERT INTO Grades (user_id, subject_id, grade, type) VALUES
 (7, 1, 8.0),
 (7, 2, 9.5),
 (7, 3, 8.0),
-(7, 4, 9.0),
+(7, 4, 9.0);
