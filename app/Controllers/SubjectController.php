@@ -8,7 +8,8 @@ use core\Request;
 
 class SubjectController
 {
-    public function index(): void {
+    public function index(): void
+    {
         $subjects = Subject::all()->getAll();
 
         foreach ($subjects as &$subject) {
@@ -19,11 +20,14 @@ class SubjectController
 
         view('subject/index', compact('subjects'));
     }
-    public function create(): void {
-        $users = User::all()->getAll();
-        view('subject/create', compact('users'));
+
+    public function create(): void
+    {
+        view('subject/create');
     }
-    public function store(Request $request): void {
+
+    public function store(Request $request): void
+    {
         $request->validate([
             'name' => 'required|string|max:50',
             'description' => 'required|string|max:255',
@@ -37,19 +41,23 @@ class SubjectController
         ];
 
         Subject::create($data);
-        redirect('/subjects');
+        redirect('/dashboard')->withSuccess('Priekšmets veiksmīgi pievienots!');
     }
-    public function edit(int $id): void {
+
+    public function edit(Request $request, int $id): void
+    {
         $subject = Subject::find($id)->get();
-        $users = User::all()->getAll();
 
         if (!$subject) {
-            redirect('/subjects');
+            redirect('/dashboard')->withError('form', 'Priekšmets nav atrasts');
+            return;
         }
 
-        view('subject/edit', compact('subject', 'users'));
+        view('subject/edit', compact('subject'));
     }
-    public function update(Request $request, int $id): void {
+
+    public function update(Request $request, int $id): void
+    {
         $request->validate([
             'name' => 'required|string|max:50',
             'description' => 'required|string|max:255',
@@ -62,11 +70,20 @@ class SubjectController
             'user_id' => request('user_id')
         ];
 
-        Subject::update($id, $data);
-        redirect('/subjects');
+        Subject::update($data, $id);
+        redirect('/dashboard')->withSuccess('Priekšmets veiksmīgi atjaunināts!');
     }
-    public function destroy(int $id): void {
+
+    public function destroy(Request $request, int $id): void
+    {
+        // Check if subject exists
+        $subject = Subject::find($id)->get();
+        if (!$subject) {
+            redirect('/dashboard')->withError('form', 'Priekšmets nav atrasts');
+            return;
+        }
+
         Subject::delete($id);
-        redirect('/subjects');
+        redirect('/dashboard')->withSuccess('Priekšmets veiksmīgi dzēsts!');
     }
 }

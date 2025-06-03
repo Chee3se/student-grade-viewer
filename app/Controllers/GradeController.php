@@ -11,10 +11,11 @@ class GradeController
 {
     public function create(): void
     {
-        $users = User::all()->getAll();
+        $users = User::where('role', '=', 'student')->getAll();
         $subjects = Subject::all()->getAll();
         view('grade/create', compact('users', 'subjects'));
     }
+
     public function store(Request $request): void
     {
         $request->validate([
@@ -24,46 +25,57 @@ class GradeController
         ]);
 
         $data = [
-            'user_id' => request('user_id'),
-            'subject_id' => request('subject_id'),
-            'grade' => request('grade')
+            'user_id' => (int) request('user_id'),
+            'subject_id' => (int) request('subject_id'),
+            'grade' => (float) number_format(request('grade'), 2, '.', '')
         ];
 
         Grade::create($data);
-        redirect('/grades');
+        redirect('/dashboard?subject=' . $data['subject_id'])->withSuccess('Atzīme veiksmīgi pievienota!');
     }
-    public function edit(int $id): void
+
+    public function edit(Request $request, int $id): void
     {
         $grade = Grade::find($id)->get();
-        $users = User::all()->getAll();
+        $users = User::where('role', '=', 'student')->getAll();
         $subjects = Subject::all()->getAll();
 
         if (!$grade) {
-            redirect('/grades');
+            redirect('/dashboard')->withError('form', 'Atzīme nav atrasta');
+            return;
         }
 
         view('grade/edit', compact('grade', 'users', 'subjects'));
     }
+
     public function update(Request $request, int $id): void
     {
         $request->validate([
-            'user_id' => 'required|integer',
-            'subject_id' => 'required|integer',
+            'user_id' => 'required|numeric',
+            'subject_id' => 'required|numeric',
             'grade' => 'required|numeric'
         ]);
 
         $data = [
-            'user_id' => request('user_id'),
-            'subject_id' => request('subject_id'),
-            'grade' => request('grade')
+            'user_id' => (int) request('user_id'),
+            'subject_id' => (int) request('subject_id'),
+            'grade' => (float) number_format(request('grade'), 2, '.', '')
         ];
 
         Grade::update($data, $id);
-        redirect('/grades');
+        redirect('/dashboard')->withSuccess('Atzīme veiksmīgi atjaunināta!');
     }
-    public function destroy(int $id): void
+
+    public function destroy(Request $request, int $id): void
     {
+        // Check if grade exists
+        $grade = Grade::find($id)->get();
+        if (!$grade) {
+            redirect('/dashboard')->withError('form', 'Atzīme nav atrasta');
+            return;
+        }
+
         Grade::delete($id);
-        redirect('/grades');
+        redirect('/dashboard')->withSuccess('Atzīme veiksmīgi dzēsta!');
     }
 }

@@ -23,23 +23,16 @@ class PageController
                 $students = User::where('role', '=', 'student')->getAll();
                 $subjects = Subject::all()->getAll();
                 $grades = Grade::all()->getAll();
-                
-                // Ensure grades have numeric values
+
                 if (is_array($grades)) {
                     foreach ($grades as &$grade) {
                         if (isset($grade['grade'])) {
-                            // Convert to float to ensure it's numeric
                             $grade['grade'] = (float) $grade['grade'];
                         }
                     }
-                    unset($grade); // Break the reference
+                    unset($grade);
                 }
-                
-                // Log data counts for debugging
-                error_log("Students: " . (is_array($students) ? count($students) : "not an array"));
-                error_log("Subjects: " . (is_array($subjects) ? count($subjects) : "not an array"));
-                error_log("Grades: " . (is_array($grades) ? count($grades) : "not an array"));
-                
+
                 view("dashboard/teacher", [
                     'students' => $students,
                     'subjects' => $subjects,
@@ -47,7 +40,82 @@ class PageController
                 ]);
                 break;
             case 'student':
-                view("dashboard/student");
+                $currentUserId = Session::get('user')['id'];
+
+                $allStudentGrades = Grade::where('user_id', '=', $currentUserId)->getAll();
+
+                $subjects = Subject::all()->getAll();
+                $users = User::all()->getAll();
+
+                $subjectMap = [];
+                foreach ($subjects as $subject) {
+                    $subjectMap[$subject['id']] = $subject;
+                }
+
+                $userMap = [];
+                foreach ($users as $user) {
+                    $userMap[$user['id']] = $user;
+                }
+
+                $enrichedGrades = [];
+                foreach ($allStudentGrades as $grade) {
+                    $subject = $subjectMap[$grade['subject_id']] ?? null;
+                    $teacher = null;
+
+                    if ($subject && isset($subject['user_id'])) {
+                        $teacher = $userMap[$subject['user_id']] ?? null;
+                    }
+
+                    $enrichedGrades[] = [
+                        'id' => $grade['id'],
+                        'grade' => (float) $grade['grade'],
+                        'subject_id' => $grade['subject_id'],
+                        'subject_name' => $subject ? $subject['name'] : 'Unknown Subject',
+                        'teacher_name' => $teacher ? $teacher['first_name'] . ' ' . $teacher['last_name'] : 'No Teacher',
+                        'created_at' => $grade['created_at'] ?? null,
+                        'updated_at' => $grade['updated_at'] ?? null
+                    ];
+                }
+
+                usort($enrichedGrades, function($a, $b) {
+                    return strtotime($b['created_at'] ?? '1970-01-01') - strtotime($a['created_at'] ?? '1970-01-01');
+                });
+
+                $newestGrades = array_slice($enrichedGrades, 0, 5);
+
+                $subjectAverages = [];
+                $subjectGradeCounts = [];
+
+                foreach ($enrichedGrades as $grade) {
+                    $subjectId = $grade['subject_id'];
+                    $subjectName = $grade['subject_name'];
+
+                    if (!isset($subjectAverages[$subjectId])) {
+                        $subjectAverages[$subjectId] = [
+                            'subject_name' => $subjectName,
+                            'total' => 0,
+                            'count' => 0,
+                            'average' => 0
+                        ];
+                    }
+
+                    $subjectAverages[$subjectId]['total'] += $grade['grade'];
+                    $subjectAverages[$subjectId]['count']++;
+                }
+
+                foreach ($subjectAverages as &$subjectAvg) {
+                    if ($subjectAvg['count'] > 0) {
+                        $subjectAvg['average'] = $subjectAvg['total'] / $subjectAvg['count'];
+                    }
+                }
+                unset($subjectAvg);
+
+                view("dashboard/student", [
+                    'allGrades' => $enrichedGrades,
+                    'newestGrades' => $newestGrades,
+                    'subjects' => $subjects,
+                    'subjectAverages' => $subjectAverages
+                ]);
                 break;
         }
     }

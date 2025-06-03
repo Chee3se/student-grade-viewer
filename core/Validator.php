@@ -92,6 +92,16 @@ class Validator
         if (is_int($value)) {
             return false;
         }
+
+        if (is_numeric($value) && (string)(int)$value === (string)$value) {
+            foreach (static::$data as $key => $val) {
+                if ($val === $value) {
+                    static::$data[$key] = (int)$value;
+                    break;
+                }
+            }
+            return false;
+        }
         return "Must be an integer.";
     }
     public static function float($value): bool|string

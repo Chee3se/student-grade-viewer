@@ -90,7 +90,7 @@ class Router
         $this->routes[array_key_last($this->routes)]['middleware'] = $key;
         return $this;
     }
-    
+
     /**
      * Apply rate limiting to the last added route.
      *
@@ -119,7 +119,7 @@ class Router
             }
 
             $pattern = str_replace('/', '\/', $route['url']);
-            $pattern = preg_replace('#:([a-zA-Z0-9_]+)#', '(?<$1>[^/]+)', $pattern);
+            $pattern = preg_replace('#\{([a-zA-Z0-9_]+)\}#', '(?<$1>[^/]+)', $pattern);
             $pattern = '#^' . $pattern . '$#';
 
             if (preg_match($pattern, (string) $uri, $matches)) {
@@ -131,16 +131,22 @@ class Router
                 }
 
                 Middleware::resolve($route['middleware'] ?? null);
-                
+
                 // Apply rate limiting if configured
                 if (isset($route['rate_limit'])) {
                     (new \core\RateLimit())->handle($route['rate_limit']);
                 }
-                
+
                 [$class, $method] = $route['controller'];
                 $request = new Request($_POST + $_FILES + $_GET, $_SERVER);
                 $instance = new $class();
-                return $instance->$method($request,$parameters);
+
+                // Pass request first, then individual parameters as separate arguments
+                if (!empty($parameters)) {
+                    return $instance->$method($request, ...array_values($parameters));
+                } else {
+                    return $instance->$method($request);
+                }
             }
         }
         $this->abort(404, 'Lapa netika atrasta');
