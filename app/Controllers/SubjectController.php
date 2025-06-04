@@ -2,8 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Models\Grade;
 use App\Models\Subject;
 use App\Models\User;
+use core\Database;
 use core\Request;
 
 class SubjectController
@@ -23,7 +25,9 @@ class SubjectController
 
     public function create(): void
     {
-        view('subject/create');
+        // Get all teachers for the dropdown
+        $teachers = (new User())->where('role', '=', 'teacher')->getAll();
+        view('subject/create', compact('teachers'));
     }
 
     public function store(Request $request): void
@@ -33,6 +37,16 @@ class SubjectController
             'description' => 'required|string|max:255',
             'user_id' => 'required|integer'
         ]);
+
+        // Validate that the user_id corresponds to a legitimate teacher
+        $teacher = (new User())->where('id', '=', request('user_id'))
+            ->where('role', '=', 'teacher')
+            ->first();
+
+        if (!$teacher) {
+            redirect('/subjects/create')->withError('form', 'Izvēlētais skolotājs nav derīgs!');
+            return;
+        }
 
         $data = [
             'name' => request('name'),
@@ -53,7 +67,9 @@ class SubjectController
             return;
         }
 
-        view('subject/edit', compact('subject'));
+        // Get all teachers for the dropdown
+        $teachers = (new User())->where('role', '=', 'teacher')->getAll();
+        view('subject/edit', compact('subject', 'teachers'));
     }
 
     public function update(Request $request, int $id): void
@@ -64,13 +80,23 @@ class SubjectController
             'user_id' => 'required|integer'
         ]);
 
+        // Validate that the user_id corresponds to a legitimate teacher
+        $teacher = (new User())->where('id', '=', request('user_id'))
+            ->where('role', '=', 'teacher')
+            ->first();
+
+        if (!$teacher) {
+            redirect('/subjects/' . $id . '/edit')->withError('form', 'Izvēlētais skolotājs nav derīgs!');
+            return;
+        }
+
         $data = [
             'name' => request('name'),
             'description' => request('description'),
             'user_id' => request('user_id')
         ];
 
-        Subject::update($data, $id);
+        Subject::update($id, $data);
         redirect('/dashboard')->withSuccess('Priekšmets veiksmīgi atjaunināts!');
     }
 
@@ -83,7 +109,10 @@ class SubjectController
             return;
         }
 
+        Grade::execute('DELETE FROM grades WHERE subject_id = :subject_id', ['subject_id' => $id]);
+
         Subject::delete($id);
+
         redirect('/dashboard')->withSuccess('Priekšmets veiksmīgi dzēsts!');
     }
 }
