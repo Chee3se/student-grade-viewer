@@ -56,13 +56,18 @@ class GradeController
             'grade' => 'required|numeric'
         ]);
 
+        if (request('grade') > 10 || request('grade') < 1) {
+            redirect('/dashboard')->withError('Grade has not been updated');
+            return;
+        }
+
         $data = [
             'user_id' => (int) request('user_id'),
             'subject_id' => (int) request('subject_id'),
             'grade' => (float) number_format(request('grade'), 2, '.', '')
         ];
 
-        Grade::update($data, $id);
+        Grade::update($id, $data);
         redirect('/dashboard')->withSuccess('Atzīme veiksmīgi atjaunināta!');
     }
 
